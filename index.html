@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comando Central DCG | Gestão Estratégica</title>
+<meta name="description" content="Plataforma oficial de gestão operacional e estratégica da DCG Corretora de Seguros. 492+ projetos, 234 repositórios, 4 VPS, 20 skills DCG.">
+<meta name="robots" content="noindex,nofollow">
+<meta name="author" content="DCG Corretora de Seguros LTDA">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231565A8'/><text x='50' y='68' font-size='50' font-weight='bold' text-anchor='middle' fill='white'>DCG</text></svg>">
+<style>
+:root {
+  --bg: #0a0e1a;
+  --bg-card: #111827;
+  --bg-hover: #1a2332;
+  --bg-input: #0f172a;
+  --border: #1e293b;
+  --border-light: #334155;
+  --text: #e2e8f0;
+  --text-muted: #64748b;
+  --text-bright: #f1f5f9;
+  --primary: #1565A8;
+  --primary-light: #2196f3;
+  --primary-dark: #0f4c81;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --purple: #8b5cf6;
+  --orange: #f97316;
+  --radius: 12px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+a { color: var(--primary-light); text-decoration: none; }
+a:hover { text-decoration: underline; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--border-light); }
+
+/* LOGIN */
+#login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; background: radial-gradient(ellipse at top, #0f172a 0%, #0a0e1a 100%); }
+.login-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 40px; width: 100%; max-width: 420px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
+.login-box .logo { text-align: center; margin-bottom: 24px; }
+.login-box .logo h1 { color: var(--primary-light); font-size: 1.4rem; margin-bottom: 4px; }
+.login-box .logo p { color: var(--text-muted); font-size: 0.85rem; }
+.login-box input { width: 100%; padding: 12px 16px; background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.95rem; margin-bottom: 16px; transition: border-color 0.2s; }
+.login-box input:focus { outline: none; border-color: var(--primary-light); }
+.login-box button { width: 100%; padding: 12px; background: var(--primary); border: none; border-radius: 8px; color: white; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+.login-box button:hover { background: var(--primary-light); }
+.login-error { color: var(--danger); font-size: 0.85rem; text-align: center; margin-top: 12px; display: none; }
+.login-info { margin-top: 20px; padding: 12px; background: var(--bg-input); border-radius: 8px; border-left: 3px solid var(--primary-light); font-size: 0.8rem; color: var(--text-muted); }
+
+/* APP */
+#app { display: none; }
+.topbar { position: fixed; top: 0; left: 0; right: 0; height: 60px; background: var(--bg-card); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 20px; z-index: 100; justify-content: space-between; }
+.topbar-left { display: flex; align-items: center; gap: 16px; }
+.topbar-brand { color: var(--primary-light); font-weight: 700; font-size: 1.1rem; cursor: pointer; }
+.topbar-brand span { color: var(--text-muted); font-size: 0.75rem; font-weight: 400; }
+.hamburger { display: none; flex-direction: column; gap: 4px; cursor: pointer; padding: 8px; }
+.hamburger span { width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: 0.3s; }
+.topbar-right { display: flex; align-items: center; gap: 16px; }
+.topbar-user { color: var(--text-muted); font-size: 0.85rem; }
+.topbar-user strong { color: var(--text); }
+.btn-logout { padding: 6px 14px; background: transparent; border: 1px solid var(--border-light); border-radius: 6px; color: var(--text-muted); cursor: pointer; font-size: 0.85rem; transition: 0.2s; }
+.btn-logout:hover { border-color: var(--danger); color: var(--danger); }
+
+/* SIDEBAR */
+.sidebar { position: fixed; top: 60px; left: 0; width: 240px; bottom: 0; background: var(--bg-card); border-right: 1px solid var(--border); padding: 16px 0; overflow-y: auto; z-index: 90; transition: transform 0.3s; }
+.sidebar-section { padding: 8px 20px; font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; margin-top: 12px; }
+.sidebar-item { display: flex; align-items: center; gap: 10px; padding: 10px 20px; color: var(--text-muted); cursor: pointer; transition: 0.15s; font-size: 0.9rem; border-left: 3px solid transparent; }
+.sidebar-item:hover { background: var(--bg-hover); color: var(--text); }
+.sidebar-item.active { background: var(--bg-hover); color: var(--primary-light); border-left-color: var(--primary-light); }
+.sidebar-item .icon { font-size: 1.1rem; width: 24px; text-align: center; }
+.sidebar-badge { margin-left: auto; background: var(--primary); color: white; font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+
+/* MAIN */
+.main { margin-left: 240px; margin-top: 60px; padding: 24px; min-height: calc(100vh - 60px); }
+.page { display: none; }
+.page.active { display: block; }
+.page-title { font-size: 1.5rem; font-weight: 700; color: var(--text-bright); margin-bottom: 4px; }
+.page-subtitle { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px; }
+
+/* CARDS */
+.card-grid { display: grid; gap: 16px; }
+.card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; transition: border-color 0.2s; }
+.card:hover { border-color: var(--border-light); }
+.card-title { color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+.card-value { font-size: 2rem; font-weight: 700; color: var(--text-bright); }
+.card-delta { font-size: 0.8rem; margin-top: 4px; }
+.card-delta.up { color: var(--success); }
+.card-delta.down { color: var(--danger); }
+.card-icon { font-size: 1.5rem; margin-bottom: 8px; }
+
+/* KPI GRID */
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+
+/* TABLE */
+.table-wrap { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; padding: 12px 16px; background: var(--bg-hover); color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+td { padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+tr:last-child td { border-bottom: none; }
+tr:hover { background: var(--bg-hover); }
+.hide-mobile { } 
+.badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+.badge-success { background: rgba(34,197,94,0.15); color: var(--success); }
+.badge-warning { background: rgba(245,158,11,0.15); color: var(--warning); }
+.badge-danger { background: rgba(239,68,68,0.15); color: var(--danger); }
+.badge-info { background: rgba(33,150,243,0.15); color: var(--primary-light); }
+.badge-purple { background: rgba(139,92,246,0.15); color: var(--purple); }
+.badge-orange { background: rgba(249,115,22,0.15); color: var(--orange); }
+.badge-muted { background: rgba(100,116,139,0.15); color: var(--text-muted); }
+
+/* SEARCH */
+.search-bar { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+.search-input { flex: 1; min-width: 200px; padding: 10px 16px; background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.9rem; }
+.search-input:focus { outline: none; border-color: var(--primary-light); }
+.filter-select { padding: 10px 16px; background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.9rem; cursor: pointer; }
+
+/* TABS */
+.tabs { display: flex; gap: 4px; margin-bottom: 16px; border-bottom: 1px solid var(--border); }
+.tab { padding: 10px 20px; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; font-size: 0.9rem; transition: 0.2s; }
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--primary-light); border-bottom-color: var(--primary-light); }
+
+/* CHAT */
+.chat-widget { position: fixed; bottom: 20px; right: 20px; z-index: 200; }
+.chat-toggle { width: 56px; height: 56px; border-radius: 50%; background: var(--primary); border: none; color: white; font-size: 1.5rem; cursor: pointer; box-shadow: 0 4px 20px rgba(21,101,168,0.4); transition: 0.3s; display: flex; align-items: center; justify-content: center; }
+.chat-toggle:hover { transform: scale(1.1); background: var(--primary-light); }
+.chat-box { position: absolute; bottom: 70px; right: 0; width: 380px; max-width: calc(100vw - 40px); height: 500px; max-height: calc(100vh - 100px); background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; display: none; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
+.chat-box.open { display: flex; }
+.chat-header { padding: 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+.chat-header .dot { width: 10px; height: 10px; background: var(--success); border-radius: 50%; }
+.chat-header h4 { font-size: 0.95rem; color: var(--text-bright); }
+.chat-header p { font-size: 0.75rem; color: var(--text-muted); }
+.chat-body { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.chat-msg { max-width: 85%; }
+.chat-msg.user { align-self: flex-end; }
+.chat-msg.bot { align-self: flex-start; }
+.chat-msg .bubble { padding: 10px 14px; border-radius: 12px; font-size: 0.85rem; line-height: 1.4; }
+.chat-msg.user .bubble { background: var(--primary); color: white; border-bottom-right-radius: 4px; }
+.chat-msg.bot .bubble { background: var(--bg-hover); color: var(--text); border-bottom-left-radius: 4px; }
+.chat-msg .time { font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; }
+.chat-typing { display: none; align-self: flex-start; padding: 8px 14px; background: var(--bg-hover); border-radius: 12px; font-size: 0.85rem; color: var(--text-muted); }
+.chat-typing.show { display: block; }
+.chat-input-wrap { padding: 12px; border-top: 1px solid var(--border); display: flex; gap: 8px; }
+.chat-input-wrap input { flex: 1; padding: 10px 14px; background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.85rem; }
+.chat-input-wrap button { padding: 10px 16px; background: var(--primary); border: none; border-radius: 8px; color: white; cursor: pointer; font-size: 0.85rem; }
+.chat-input-wrap button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* WHATSAPP FLOAT */
+.wa-float { position: fixed; bottom: 20px; left: 20px; z-index: 200; width: 56px; height: 56px; border-radius: 50%; background: #25D366; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.8rem; text-decoration: none; box-shadow: 0 4px 20px rgba(37,211,102,0.4); transition: 0.3s; }
+.wa-float:hover { transform: scale(1.1); text-decoration: none; }
+
+/* LOADING */
+.loading { text-align: center; padding: 40px; color: var(--text-muted); }
+.spinner { display: inline-block; width: 32px; height: 32px; border: 3px solid var(--border); border-top-color: var(--primary-light); border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* RISK BANNER */
+.risk-banner { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: var(--radius); padding: 16px 20px; margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
+.risk-banner .icon { font-size: 1.5rem; }
+.risk-banner .text { flex: 1; }
+.risk-banner .text strong { color: var(--danger); }
+.risk-banner .text p { color: var(--text-muted); font-size: 0.85rem; margin-top: 2px; }
+
+/* FOOTER */
+.footer { margin-top: 40px; padding: 20px 0; border-top: 1px solid var(--border); text-align: center; color: var(--text-muted); font-size: 0.8rem; }
+.footer a { color: var(--primary-light); }
+
+/* PROGRESS BAR */
+.progress { height: 8px; background: var(--bg-input); border-radius: 4px; overflow: hidden; margin-top: 8px; }
+.progress-fill { height: 100%; background: var(--primary-light); border-radius: 4px; transition: width 0.5s; }
+
+/* STAT ROW */
+.stat-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+.stat-row:last-child { border-bottom: none; }
+.stat-row .label { color: var(--text-muted); }
+.stat-row .value { color: var(--text-bright); font-weight: 600; }
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .hamburger { display: flex; }
+  .sidebar { transform: translateX(-100%); width: 260px; }
+  .sidebar.open { transform: translateX(0); }
+  .main { margin-left: 0; padding: 16px; }
+  .kpi-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+  .hide-mobile { display: none; }
+  .card-value { font-size: 1.5rem; }
+  .chat-box { width: calc(100vw - 40px); }
+  .topbar-user { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="logo">
+      <h1>🏛️ Comando Central DCG</h1>
+      <p>Gestão Estratégica do Ecossistema</p>
+    </div>
+    <input type="email" id="login-email" placeholder="E-mail" autocomplete="email">
+    <input type="password" id="login-pass" placeholder="Senha" autocomplete="current-password">
+    <button onclick="doLogin()">Entrar</button>
+    <div class="login-error" id="login-error">Credenciais inválidas. Tente novamente.</div>
+    <div class="login-info">
+      <strong>Acesso restrito:</strong> Diniz e equipe autorizada.<br>
+      Esqueceu a senha? Chame no WhatsApp (11) 93075-9163.
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="hamburger" onclick="toggleSidebar()">
+        <span></span><span></span><span></span>
+      </div>
+      <div class="topbar-brand" onclick="showPage('dashboard')">
+        🏛️ Comando Central <span>DCG</span>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-user">Olá, <strong id="user-name">Diniz</strong></div>
+      <button class="btn-logout" onclick="doLogout()">Sair</button>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-section">Visão Geral</div>
+    <div class="sidebar-item active" onclick="showPage('dashboard')" data-page="dashboard">
+      <span class="icon">📊</span> Dashboard
+    </div>
+    <div class="sidebar-item" onclick="showPage('guerra')" data-page="guerra">
+      <span class="icon">⚔️</span> Sala de Guerra
+      <span class="sidebar-badge" id="badge-guerra">0</span>
+    </div>
+    <div class="sidebar-item" onclick="showPage('imperio')" data-page="imperio">
+      <span class="icon">🗺️</span> Mapa do Império
+    </div>
+
+    <div class="sidebar-section">Ativos</div>
+    <div class="sidebar-item" onclick="showPage('projetos')" data-page="projetos">
+      <span class="icon">📦</span> Projetos
+      <span class="sidebar-badge" id="badge-projetos">0</span>
+    </div>
+    <div class="sidebar-item" onclick="showPage('lovable')" data-page="lovable">
+      <span class="icon">💖</span> Lovable Legacy
+      <span class="sidebar-badge" id="badge-lovable">0</span>
+    </div>
+    <div class="sidebar-item" onclick="showPage('github')" data-page="github">
+      <span class="icon">🐙</span> GitHub
+    </div>
+    <div class="sidebar-item" onclick="showPage('supabase')" data-page="supabase">
+      <span class="icon">🗄️</span> Supabase
+    </div>
+    <div class="sidebar-item" onclick="showPage('vps')" data-page="vps">
+      <span class="icon">🖥️</span> VPS
+    </div>
+
+    <div class="sidebar-section">Governança</div>
+    <div class="sidebar-item" onclick="showPage('tarefas')" data-page="tarefas">
+      <span class="icon">✅</span> Tarefas
+      <span class="sidebar-badge" id="badge-tarefas">0</span>
+    </div>
+    <div class="sidebar-item" onclick="showPage('integracoes')" data-page="integracoes">
+      <span class="icon">🔗</span> Integrações
+    </div>
+    <div class="sidebar-item" onclick="showPage('skills')" data-page="skills">
+      <span class="icon">🧠</span> Skills DCG
+    </div>
+    <div class="sidebar-item" onclick="showPage('politicas')" data-page="politicas">
+      <span class="icon">📜</span> Políticas
+    </div>
+    <div class="sidebar-item" onclick="showPage('ia')" data-page="ia">
+      <span class="icon">🤖</span> IA Recomenda
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <h1 class="page-title">Dashboard Executivo</h1>
+      <p class="page-subtitle">Visão geral do ecossistema DCG em tempo real</p>
+      <div class="kpi-grid" id="kpi-grid">
+        <div class="card"><div class="card-icon">📦</div><div class="card-title">Projetos</div><div class="card-value" id="kpi-projetos">--</div></div>
+        <div class="card"><div class="card-icon">🟢</div><div class="card-title">Em Produção</div><div class="card-value" id="kpi-producao">--</div></div>
+        <div class="card"><div class="card-icon">🔧</div><div class="card-title">Em Desenvolvimento</div><div class="card-value" id="kpi-dev">--</div></div>
+        <div class="card"><div class="card-icon">💡</div><div class="card-title">Em Planejamento</div><div class="card-value" id="kpi-planej">--</div></div>
+        <div class="card"><div class="card-icon">💖</div><div class="card-title">Lovable Legacy</div><div class="card-value" id="kpi-lovable">--</div></div>
+        <div class="card"><div class="card-icon">⚠️</div><div class="card-title">Risco Compliance</div><div class="card-value" id="kpi-risco">--</div></div>
+        <div class="card"><div class="card-icon">🖥️</div><div class="card-title">VPS Ativas</div><div class="card-value" id="kpi-vps">--</div></div>
+        <div class="card"><div class="card-icon">🔗</div><div class="card-title">Integrações</div><div class="card-value" id="kpi-integracoes">--</div></div>
+        <div class="card"><div class="card-icon">🧠</div><div class="card-title">Skills DCG</div><div class="card-value" id="kpi-skills">--</div></div>
+        <div class="card"><div class="card-icon">📜</div><div class="card-title">Políticas</div><div class="card-value" id="kpi-politicas">--</div></div>
+      </div>
+      <div class="card-grid" style="grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div class="card">
+          <h3 style="color:var(--text-bright);margin-bottom:16px;font-size:1.1rem;">📊 Distribuição por Status</h3>
+          <div id="status-distribution" class="loading"><div class="spinner"></div></div>
+        </div>
+        <div class="card">
+          <h3 style="color:var(--text-bright);margin-bottom:16px;font-size:1.1rem;">🏗️ Distribuição por Plataforma</h3>
+          <div id="platform-distribution" class="loading"><div class="spinner"></div></div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:16px;">
+        <h3 style="color:var(--text-bright);margin-bottom:16px;font-size:1.1rem;">⚡ Projetos Críticos</h3>
+        <div id="critical-projects" class="loading"><div class="spinner"></div></div>
+      </div>
+    </div>
+
+    <!-- SALA DE GUERRA -->
+    <div class="page" id="page-guerra">
+      <h1 class="page-title">⚔️ Sala de Guerra</h1>
+      <p class="page-subtitle">Projetos críticos, riscos e pendências urgentes</p>
+      <div id="guerra-content" class="loading"><div class="spinner"></div></div>
+    </div>
+
+    <!-- MAPA DO IMPÉRIO -->
+    <div class="page" id="page-imperio">
+      <h1 class="page-title">🗺️ Mapa do Império DCG</h1>
+      <p class="page-subtitle">Visualização completa do ecossistema por categoria</p>
+      <div id="imperio-content" class="loading"><div class="spinner"></div></div>
+    </div>
+
+    <!-- PROJETOS -->
+    <div class="page" id="page-projetos">
+      <h1 class="page-title">📦 Projetos</h1>
+      <p class="page-subtitle">Inventário completo do ecossistema DCG</p>
+      <div class="search-bar">
+        <input type="text" class="search-input" id="search-projetos" placeholder="Buscar projeto..." oninput="filterProjetos()">
+        <select class="filter-select" id="filter-status" onchange="filterProjetos()">
+          <option value="">Todos os status</option>
+          <option value="Em producao">Em produção</option>
+          <option value="Em desenvolvimento">Em desenvolvimento</option>
+          <option value="Em planejamento">Em planejamento</option>
+          <option value="Arquivado">Arquivado</option>
+        </select>
+        <select class="filter-select" id="filter-categoria" onchange="filterProjetos()">
+          <option value="">Todas as categorias</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Projeto</th><th class="hide-mobile">Categoria</th><th>Status</th>
+            <th class="hide-mobile">Plataforma</th><th class="hide-mobile">Dominio</th><th>Risco</th>
+          </tr></thead>
+          <tbody id="projetos-table"><tr><td colspan="6" class="loading"><div class="spinner"></div></td></tr></tbody>
+        </table>
+      </div>
+      <div id="projetos-count" style="text-align:center;color:var(--text-muted);margin-top:12px;font-size:0.85rem;"></div>
+    </div>
+
+    <!-- LOVABLE -->
+    <div class="page" id="page-lovable">
+      <h1 class="page-title">💖 Lovable Legacy</h1>
+      <p class="page-subtitle">375+ projetos no Lovable — classificação e risco</p>
+      <div id="lovable-stats" class="kpi-grid"></div>
+      <div class="search-bar" style="margin-top:16px;">
+        <input type="text" class="search-input" id="search-lovable" placeholder="Buscar..." oninput="filterLovable()">
+        <select class="filter-select" id="filter-lovable-cat" onchange="filterLovable()">
+          <option value="">Todas as categorias</option>
+        </select>
+        <select class="filter-select" id="filter-lovable-risk" onchange="filterLovable()">
+          <option value="">Todos</option>
+          <option value="bloqueado">🚫 Bloqueados</option>
+          <option value="pendente">⏳ Pendentes</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Nome</th><th class="hide-mobile">Categoria</th><th>Status</th>
+            <th class="hide-mobile">Publicado</th><th>Risco</th>
+          </tr></thead>
+          <tbody id="lovable-table"><tr><td colspan="5" class="loading"><div class="spinner"></div></td></tr></tbody>
+        </table>
+      </div>
+      <div id="lovable-count" style="text-align:center;color:var(--text-muted);margin-top:12px;font-size:0.85rem;"></div>
+    </div>
+
+    <!-- GITHUB -->
+    <div class="page" id="page-github">
+      <h1 class="page-title">🐙 GitHub</h1>
+      <p class="page-subtitle">Repositórios mapeados no GitHub</p>
+      <div class="search-bar">
+        <input type="text" class="search-input" id="search-github" placeholder="Buscar repositório..." oninput="filterGithub()">
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Repositório</th><th class="hide-mobile">Linguagem</th><th class="hide-mobile">Framework</th><th>Status</th><th class="hide-mobile">Risco</th></tr></thead>
+          <tbody id="github-table"><tr><td colspan="5" class="loading"><div class="spinner"></div></td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SUPABASE -->
+    <div class="page" id="page-supabase">
+      <h1 class="page-title">🗄️ Supabase</h1>
+      <p class="page-subtitle">Projetos Supabase mapeados</p>
+      <div id="supabase-content" class="loading"><div class="spinner"></div></div>
+    </div>
+
+    <!-- VPS -->
+    <div class="page" id="page-vps">
+      <h1 class="page-title">🖥️ VPS Hostinger</h1>
+      <p class="page-subtitle">Infraestrutura de servidores</p>
+      <div id="vps-content" class="loading"><div class="spinner"></div></div>
+    </div>
+
+    <!-- TAREFAS -->
+    <div class="page" id="page-tarefas">
+      <h1 class="page-title">✅ Tarefas</h1>
+      <p class="page-subtitle">Tarefas e pendências do ecossistema</p>
+      <div class="search-bar">
+        <select class="filter-select" id="filter-tarefa-status" onchange="filterTarefas()">
+          <option value="">Todas</option>
+          <option value="pendente">Pendentes</option>
+          <option value="em_andamento">Em andamento</option>
+          <option value="concluida">Concluídas</option>
+        </select>
+      </div>
+      <div id="tarefas-content" class="loading"><div class="spinner"></div></div>
+    </div>
+
+    <!-- INTEGRACOES -->
+    <div class="page" id="page-integracoes">
+      <h1 class="page-title">🔗 Integrações</h1>
+      <p class="page-subtitle">Sistemas e serviços conectados ao ecossistema</p>
+      <div id="integracoes-content" class="loading"><div class="spinner"></div></div>
+    </div>
+
+    <!-- SKILLS -->
+    <div class="page" id="page-skills">
+      <h1 class="page-title">🧠 Skills DCG</h1>
+      <p class="page-subtitle">Biblioteca de competências técnicas e operacionais</p>
+      <div id="skills-content" class="loading"><div class="spinner"></div></div>
+    </div>
+
+    <!-- POLITICAS -->
+    <div class="page" id="page-politicas">
+      <h1 class="page-title">📜 Políticas DCG</h1>
+      <p class="page-subtitle">Diretrizes permanentes de governança</p>
+      <div id="politicas-content" class="loading"><div class="spinner"></div></div>
+    </div>
+
+    <!-- IA RECOMENDA -->
+    <div class="page" id="page-ia">
+      <h1 class="page-title">🤖 IA Recomenda</h1>
+      <p class="page-subtitle">Recomendações automáticas de inteligência</p>
+      <div id="ia-content" class="loading"><div class="spinner"></div></div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <p>© 2026 DCG Corretora de Seguros LTDA · SUSEP 10.2010993.8 · CNPJ 16.383.565/0001-35</p>
+      <p style="margin-top:4px;">WhatsApp: (11) 93075-9163 · <a href="https://www.dcgseguros.com.br" target="_blank">www.dcgseguros.com.br</a></p>
+      <p style="margin-top:8px;font-style:italic;">"O pessimista senta-se e lastima-se; o otimista levanta-se e age." — R. O. Dantas</p>
+    </div>
+  </div>
+</div>
+
+<!-- WHATSAPP FLOAT -->
+<a href="https://wa.me/5511930759163" class="wa-float" target="_blank" title="WhatsApp DCG">💬</a>
+
+<!-- CHAT WIDGET -->
+<div class="chat-widget">
+  <div class="chat-box" id="chat-box">
+    <div class="chat-header">
+      <div class="dot"></div>
+      <div><h4>Tim DCG</h4><p>Online · Estrategista Digital</p></div>
+    </div>
+    <div class="chat-body" id="chat-body">
+      <div class="chat-msg bot"><div class="bubble">Olá, Diniz! 👋 Sou o Tim DCG, seu estrategista digital. Como posso ajudar hoje?</div><div class="time">agora</div></div>
+    </div>
+    <div class="chat-typing" id="chat-typing">Tim está digitando...</div>
+    <div class="chat-input-wrap">
+      <input type="text" id="chat-input" placeholder="Mensagem..." onkeypress="if(event.key==='Enter')sendChat()">
+      <button id="chat-send" onclick="sendChat()">➤</button>
+    </div>
+  </div>
+  <button class="chat-toggle" onclick="toggleChat()" id="chat-toggle">🤖</button>
+</div>
+
+<script>
+// ================================================
+// CONFIG
+// ================================================
+const SUPABASE_URL = 'https://mxathygvqidwhdpdvsbu.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_dSwVNWGno_XpdLIJhhMhpw_AhZr3CXn';
+const TIM_API = 'https://app.base44.com/api/apps/69ccbad29ac7348ad4530659/chat';
+const LOGIN_EMAIL = 'diniz@dcgseguros.com.br';
+const LOGIN_PASS = 'DCGdiniz2026';
+
+// STATE
+let allProjetos = [];
+let allTarefas = [];
+let allIntegracoes = [];
+let allLovable = [];
+let allGithub = [];
+let allSupabase = [];
+let allVps = [];
+let allSkills = [];
+let allPoliticas = [];
+let allRecomendacoes = [];
+let chatHistory = [];
+
+// ================================================
+// AUTH
+// ================================================
+function doLogin() {
+  const email = document.getElementById('login-email').value.trim().toLowerCase();
+  const pass = document.getElementById('login-pass').value;
+  if (email === LOGIN_EMAIL && pass === LOGIN_PASS) {
+    sessionStorage.setItem('dcg_cc_auth', '1');
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    loadData();
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+  }
+}
+
+function doLogout() {
+  sessionStorage.removeItem('dcg_cc_auth');
+  location.reload();
+}
+
+function checkAuth() {
+  if (sessionStorage.getItem('dcg_cc_auth') === '1') {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    loadData();
+  }
+}
+
+// Enter key login
+document.getElementById('login-pass').addEventListener('keypress', e => { if(e.key==='Enter') doLogin(); });
+
+// ================================================
+// NAVIGATION
+// ================================================
+function showPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const el = document.getElementById('page-' + page);
+  if (el) el.classList.add('active');
+  document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+  const item = document.querySelector(`[data-page="${page}"]`);
+  if (item) item.classList.add('active');
+  if (window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('open');
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+function toggleChat() {
+  document.getElementById('chat-box').classList.toggle('open');
+}
+
+// ================================================
+// API
+// ================================================
+async function apiFetch(table, limit = 500) {
+  const resp = await fetch(`${SUPABASE_URL}/rest/v1/${table}?select=*&limit=${limit}`, {
+    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+  });
+  if (!resp.ok) throw new Error(`API ${table}: ${resp.status}`);
+  return resp.json();
+}
+
+// ================================================
+// LOAD DATA
+// ================================================
+async function loadData() {
+  try {
+    const [projetos, tarefas, integracoes, lovable, github, supabase, vps, skills, politicas, recomendacoes] = await Promise.all([
+      apiFetch('projetos').catch(() => []),
+      apiFetch('tarefas').catch(() => []),
+      apiFetch('integracoes').catch(() => []),
+      apiFetch('lovable_legacy').catch(() => []),
+      apiFetch('github_repositories').catch(() => []),
+      apiFetch('supabase_projects').catch(() => []),
+      apiFetch('vps_assets').catch(() => []),
+      apiFetch('skills_dcg').catch(() => []),
+      apiFetch('policies').catch(() => []),
+      apiFetch('ai_recommendations').catch(() => [])
+    ]);
+
+    allProjetos = projetos;
+    allTarefas = tarefas;
+    allIntegracoes = integracoes;
+    allLovable = lovable;
+    allGithub = github;
+    allSupabase = supabase;
+    allVps = vps;
+    allSkills = skills;
+    allPoliticas = politicas;
+    allRecomendacoes = recomendacoes;
+
+    renderDashboard();
+    renderProjetos();
+    renderLovable();
+    renderGithub();
+    renderSupabase();
+    renderVps();
+    renderTarefas();
+    renderIntegracoes();
+    renderSkills();
+    renderPoliticas();
+    renderIA();
+    renderGuerra();
+    renderImperio();
+
+    // Update badges
+    document.getElementById('badge-projetos').textContent = projetos.length;
+    document.getElementById('badge-lovable').textContent = lovable.length;
+    document.getElementById('badge-tarefas').textContent = tarefas.filter(t => t.status !== 'concluida').length;
+    document.getElementById('badge-guerra').textContent = projetos.filter(p => p.critico).length;
+
+  } catch (e) {
+    console.error('Erro ao carregar dados:', e);
+  }
+}
+
+// ================================================
+// DASHBOARD
+// ================================================
+function renderDashboard() {
+  const total = allProjetos.length;
+  const producao = allProjetos.filter(p => p.status === 'Em producao').length;
+  const dev = allProjetos.filter(p => p.status === 'Em desenvolvimento').length;
+  const planej = allProjetos.filter(p => p.status === 'Em planejamento').length;
+  const risco = allProjetos.filter(p => p.risco === 'alto' || p.risco === 'Alto').length;
+  const vpsAtivas = allVps.filter(v => v.status === 'ativo').length;
+
+  document.getElementById('kpi-projetos').textContent = total;
+  document.getElementById('kpi-producao').textContent = producao;
+  document.getElementById('kpi-dev').textContent = dev;
+  document.getElementById('kpi-planej').textContent = planej;
+  document.getElementById('kpi-lovable').textContent = allLovable.length;
+  document.getElementById('kpi-risco').textContent = allLovable.filter(l => l.risco_compliance).length;
+  document.getElementById('kpi-vps').textContent = vpsAtivas;
+  document.getElementById('kpi-integracoes').textContent = allIntegracoes.length;
+  document.getElementById('kpi-skills').textContent = allSkills.length;
+  document.getElementById('kpi-politicas').textContent = allPoliticas.length;
+
+  // Status distribution
+  const statusEl = document.getElementById('status-distribution');
+  const statuses = {};
+  allProjetos.forEach(p => { const s = p.status || 'Sem status'; statuses[s] = (statuses[s]||0)+1; });
+  statusEl.innerHTML = Object.entries(statuses).sort((a,b)=>b[1]-a[1]).map(([s,c]) => 
+    `<div class="stat-row"><span class="label">${s}</span><span class="value">${c}</span></div>`
+  ).join('');
+
+  // Platform distribution
+  const platEl = document.getElementById('platform-distribution');
+  const platforms = {};
+  allProjetos.forEach(p => { const pl = p.plataforma_principal || 'Não definida'; platforms[pl] = (platforms[pl]||0)+1; });
+  platEl.innerHTML = Object.entries(platforms).sort((a,b)=>b[1]-a[1]).slice(0,10).map(([p,c]) => 
+    `<div class="stat-row"><span class="label">${p}</span><span class="value">${c}</span></div>`
+  ).join('');
+
+  // Critical projects
+  const critEl = document.getElementById('critical-projects');
+  const critical = allProjetos.filter(p => p.critico);
+  if (critical.length === 0) {
+    critEl.innerHTML = '<p style="color:var(--text-muted);text-align:center;padding:20px;">Nenhum projeto crítico cadastrado.</p>';
+  } else {
+    critEl.innerHTML = `<div class="table-wrap"><table><thead><tr><th>Projeto</th><th>Status</th><th class="hide-mobile">Próxima Ação</th></tr></thead><tbody>` +
+      critical.map(p => `<tr><td><strong>${p.nome}</strong></td><td><span class="badge ${p.status==='Em producao'?'badge-success':'badge-warning'}">${p.status||'-'}</span></td><td class="hide-mobile">${p.proxima_acao || '-'}</td></tr>`).join('') +
+      `</tbody></table></div>`;
+  }
+}
+
+// ================================================
+// PROJETOS
+// ================================================
+function renderProjetos() {
+  // Popular filtro de categorias
+  const cats = [...new Set(allProjetos.map(p => p.categoria).filter(Boolean))].sort();
+  const catSelect = document.getElementById('filter-categoria');
+  catSelect.innerHTML = '<option value="">Todas as categorias</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
+  filterProjetos();
+}
+
+function filterProjetos() {
+  const search = document.getElementById('search-projetos').value.toLowerCase();
+  const status = document.getElementById('filter-status').value;
+  const cat = document.getElementById('filter-categoria').value;
+  
+  let filtered = allProjetos;
+  if (search) filtered = filtered.filter(p => p.nome.toLowerCase().includes(search) || (p.descricao||'').toLowerCase().includes(search));
+  if (status) filtered = filtered.filter(p => p.status === status);
+  if (cat) filtered = filtered.filter(p => p.categoria === cat);
+
+  const tbody = document.getElementById('projetos-table');
+  if (filtered.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:20px;">Nenhum projeto encontrado.</td></tr>';
+  } else {
+    tbody.innerHTML = filtered.slice(0, 100).map(p => {
+      const riskBadge = p.risco === 'alto' ? 'badge-danger' : p.risco === 'medio' ? 'badge-warning' : 'badge-success';
+      const statusBadge = p.status === 'Em producao' ? 'badge-success' : p.status === 'Em desenvolvimento' ? 'badge-warning' : p.status === 'Em planejamento' ? 'badge-info' : 'badge-muted';
+      return `<tr>
+        <td><strong>${p.nome}</strong>${p.descricao ? `<br><span style="font-size:0.78rem;color:var(--text-muted);">${p.descricao.slice(0,60)}</span>` : ''}</td>
+        <td class="hide-mobile">${p.categoria || '-'}</td>
+        <td><span class="badge ${statusBadge}">${p.status || '-'}</span></td>
+        <td class="hide-mobile">${p.plataforma_principal || '-'}</td>
+        <td class="hide-mobile">${p.dominio ? `<a href="https://${p.dominio}" target="_blank">${p.dominio}</a>` : '-'}</td>
+        <td><span class="badge ${riskBadge}">${p.risco || 'baixo'}</span></td>
+      </tr>`;
+    }).join('');
+  }
+  document.getElementById('projetos-count').textContent = `Mostrando ${Math.min(filtered.length, 100)} de ${filtered.length} projetos`;
+}
+
+// ================================================
+// LOVABLE
+// ================================================
+function renderLovable() {
+  const cats = [...new Set(allLovable.map(l => l.categoria_dcg).filter(Boolean))].sort();
+  document.getElementById('filter-lovable-cat').innerHTML = '<option value="">Todas as categorias</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
+  
+  // Stats
+  const total = allLovable.length;
+  const publicado = allLovable.filter(l => l.publicado).length;
+  const bloqueado = allLovable.filter(l => l.classificacao === 'bloqueado').length;
+  const pendente = allLovable.filter(l => l.classificacao === 'pendente').length;
+  
+  document.getElementById('lovable-stats').innerHTML = `
+    <div class="card"><div class="card-icon">💖</div><div class="card-title">Total Lovable</div><div class="card-value">${total}</div></div>
+    <div class="card"><div class="card-icon">🌍</div><div class="card-title">Publicados</div><div class="card-value">${publicado}</div></div>
+    <div class="card"><div class="card-icon">⏳</div><div class="card-title">Pendentes</div><div class="card-value">${pendente}</div></div>
+    <div class="card"><div class="card-icon">🚫</div><div class="card-title">Bloqueados</div><div class="card-value">${bloqueado}</div></div>
+  `;
+  filterLovable();
+}
+
+function filterLovable() {
+  const search = document.getElementById('search-lovable').value.toLowerCase();
+  const cat = document.getElementById('filter-lovable-cat').value;
+  const risk = document.getElementById('filter-lovable-risk').value;
+  
+  let filtered = allLovable;
+  if (search) filtered = filtered.filter(l => l.nome.toLowerCase().includes(search));
+  if (cat) filtered = filtered.filter(l => l.categoria_dcg === cat);
+  if (risk === 'bloqueado') filtered = filtered.filter(l => l.classificacao === 'bloqueado');
+  if (risk === 'pendente') filtered = filtered.filter(l => l.classificacao === 'pendente');
+
+  const tbody = document.getElementById('lovable-table');
+  if (filtered.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:20px;">Nenhum projeto encontrado.</td></tr>';
+  } else {
+    tbody.innerHTML = filtered.slice(0, 100).map(l => {
+      const riskBadge = l.risco_compliance ? 'badge-danger' : l.publicado ? 'badge-success' : 'badge-muted';
+      const riskText = l.risco_compliance ? '🚫 Risco' : l.publicado ? 'Publicado' : 'Não pub.';
+      const classBadge = l.classificacao === 'bloqueado' ? 'badge-danger' : 'badge-warning';
+      return `<tr>
+        <td><strong>${l.nome}</strong>${l.url ? `<br><a href="${l.url}" target="_blank" style="font-size:0.78rem;">${l.url.slice(0,40)}</a>` : ''}</td>
+        <td class="hide-mobile">${l.categoria_dcg || '-'}</td>
+        <td><span class="badge ${classBadge}">${l.classificacao || 'pendente'}</span></td>
+        <td class="hide-mobile">${l.publicado ? '✅ Sim' : '❌ Não'}</td>
+        <td><span class="badge ${riskBadge}">${riskText}</span></td>
+      </tr>`;
+    }).join('');
+  }
+  document.getElementById('lovable-count').textContent = `Mostrando ${Math.min(filtered.length, 100)} de ${filtered.length}`;
+}
+
+// ================================================
+// GITHUB
+// ================================================
+function renderGithub() {
+  filterGithub();
+}
+
+function filterGithub() {
+  const search = (document.getElementById('search-github')?.value || '').toLowerCase();
+  let filtered = allGithub;
+  if (search) filtered = filtered.filter(g => g.nome.toLowerCase().includes(search));
+  
+  const tbody = document.getElementById('github-table');
+  if (filtered.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:20px;">Nenhum repositório encontrado.</td></tr>';
+  } else {
+    tbody.innerHTML = filtered.slice(0, 100).map(g => {
+      const statusBadge = g.status === 'ativo' ? 'badge-success' : g.status === 'critico' ? 'badge-danger' : 'badge-muted';
+      const riskBadge = g.risk === 'alto' ? 'badge-danger' : g.risk === 'medio' ? 'badge-warning' : 'badge-success';
+      return `<tr>
+        <td><strong>${g.nome}</strong>${g.url ? `<br><a href="${g.url}" target="_blank" style="font-size:0.78rem;">${g.url.slice(0,45)}</a>` : ''}</td>
+        <td class="hide-mobile">${g.language || '-'}</td>
+        <td class="hide-mobile">${g.framework || '-'}</td>
+        <td><span class="badge ${statusBadge}">${g.status || '-'}</span></td>
+        <td class="hide-mobile"><span class="badge ${riskBadge}">${g.risk || 'baixo'}</span></td>
+      </tr>`;
+    }).join('');
+  }
+}
+
+// ================================================
+// SUPABASE
+// ================================================
+function renderSupabase() {
+  const el = document.getElementById('supabase-content');
+  if (allSupabase.length === 0) {
+    el.innerHTML = '<div class="card"><p style="color:var(--text-muted);text-align:center;padding:20px;">Nenhum projeto Supabase cadastrado.</p></div>';
+    return;
+  }
+  el.innerHTML = `<div class="table-wrap"><table><thead><tr><th>Projeto</th><th>RLS</th><th>Auth</th><th>Storage</th><th>Edge Functions</th><th>Risco</th></tr></thead><tbody>` +
+    allSupabase.map(s => {
+      const rlsBadge = s.rls_status === 'ativo' ? 'badge-success' : 'badge-warning';
+      const authBadge = s.auth_status === 'ativo' ? 'badge-success' : 'badge-warning';
+      const riskBadge = s.risk === 'alto' ? 'badge-danger' : s.risk === 'medio' ? 'badge-warning' : 'badge-success';
+      return `<tr><td><strong>${s.name}</strong>${s.related_project ? `<br><span style="font-size:0.78rem;color:var(--text-muted);">${s.related_project}</span>` : ''}</td>
+        <td><span class="badge ${rlsBadge}">${s.rls_status||'-'}</span></td>
+        <td><span class="badge ${authBadge}">${s.auth_status||'-'}</span></td>
+        <td>${s.storage_status||'-'}</td><td>${s.edge_functions||0}</td>
+        <td><span class="badge ${riskBadge}">${s.risk||'baixo'}</span></td></tr>`;
+    }).join('') + `</tbody></table></div>`;
+}
+
+// ================================================
+// VPS
+// ================================================
+function renderVps() {
+  const el = document.getElementById('vps-content');
+  if (allVps.length === 0) {
+    el.innerHTML = '<div class="card"><p style="color:var(--text-muted);text-align:center;padding:20px;">Nenhuma VPS cadastrada.</p></div>';
+    return;
+  }
+  el.innerHTML = allVps.map(v => {
+    const statusBadge = v.status === 'ativo' ? 'badge-success' : v.status === 'cancelado' ? 'badge-danger' : 'badge-warning';
+    const riskBadge = v.risk === 'alto' ? 'badge-danger' : v.risk === 'medio' ? 'badge-warning' : 'badge-success';
+    return `<div class="card" style="margin-bottom:16px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <h3 style="color:var(--text-bright);">🖥️ ${v.name}</h3>
+        <span class="badge ${statusBadge}">${v.status}</span>
+      </div>
+      <div class="stat-row"><span class="label">IP</span><span class="value">${v.ip||'-'}</span></div>
+      <div class="stat-row"><span class="label">Provider</span><span class="value">${v.provider||'-'}</span></div>
+      <div class="stat-row"><span class="label">SSH Port</span><span class="value">${v.ssh_port||'-'}</span></div>
+      <div class="stat-row"><span class="label">Apps</span><span class="value">${v.apps_count||0}</span></div>
+      <div class="stat-row"><span class="label">Risco</span><span class="value"><span class="badge ${riskBadge}">${v.risk||'baixo'}</span></span></div>
+      ${v.notes ? `<p style="margin-top:12px;font-size:0.85rem;color:var(--text-muted);">${v.notes}</p>` : ''}
+    </div>`;
+  }).join('');
+}
+
+// ================================================
+// TAREFAS
+// ================================================
+function renderTarefas() {
+  filterTarefas();
+}
+
+function filterTarefas() {
+  const el = document.getElementById('tarefas-content');
+  const status = document.getElementById('filter-tarefa-status').value;
+  let filtered = allTarefas;
+  if (status === 'pendente') filtered = filtered.filter(t => !t.status || t.status === 'pendente');
+  if (status === 'em_andamento') filtered = filtered.filter(t => t.status === 'em_andamento');
+  if (status === 'concluida') filtered = filtered.filter(t => t.status === 'concluida');
+
+  if (filtered.length === 0) {
+    el.innerHTML = '<div class="card"><p style="color:var(--text-muted);text-align:center;padding:20px;">Nenhuma tarefa encontrada.</p></div>';
+    return;
+  }
+  el.innerHTML = `<div class="table-wrap"><table><thead><tr><th>Tarefa</th><th class="hide-mobile">Projeto</th><th class="hide-mobile">Responsável</th><th>Prioridade</th><th class="hide-mobile">Prazo</th><th>Status</th></tr></thead><tbody>` +
+    filtered.map(t => {
+      const prBadge = t.prioridade === 'alta' ? 'badge-danger' : t.prioridade === 'media' ? 'badge-warning' : 'badge-muted';
+      const stBadge = t.status === 'concluida' ? 'badge-success' : t.status === 'em_andamento' ? 'badge-info' : 'badge-warning';
+      const atrasada = t.prazo && new Date(t.prazo) < new Date() && t.status !== 'concluida';
+      return `<tr>
+        <td><strong>${t.titulo||t.nome||'-'}</strong>${t.descricao ? `<br><span style="font-size:0.78rem;color:var(--text-muted);">${t.descricao.slice(0,60)}</span>` : ''}</td>
+        <td class="hide-mobile">${t.projeto_nome||'-'}</td>
+        <td class="hide-mobile">${t.responsavel||'-'}</td>
+        <td><span class="badge ${prBadge}">${t.prioridade||'-'}</span></td>
+        <td class="hide-mobile" style="${atrasada?'color:var(--danger);':''}">${t.prazo ? new Date(t.prazo).toLocaleDateString('pt-BR') : '-'}${atrasada?' ⚠️':''}</td>
+        <td><span class="badge ${stBadge}">${t.status||'pendente'}</span></td>
+      </tr>`;
+    }).join('') + `</tbody></table></div>`;
+}
+
+// ================================================
+// INTEGRACOES
+// ================================================
+function renderIntegracoes() {
+  const el = document.getElementById('integracoes-content');
+  if (allIntegracoes.length === 0) {
+    el.innerHTML = '<div class="card"><p style="color:var(--text-muted);text-align:center;padding:20px;">Nenhuma integração cadastrada.</p></div>';
+    return;
+  }
+  el.innerHTML = `<div class="table-wrap"><table><thead><tr><th>Integração</th><th class="hide-mobile">Tipo</th><th>Status</th><th class="hide-mobile">Projeto</th><th class="hide-mobile">Risco</th></tr></thead><tbody>` +
+    allIntegracoes.map(i => {
+      const stBadge = i.status === 'ativo' ? 'badge-success' : i.status === 'inativo' ? 'badge-danger' : 'badge-warning';
+      const riskBadge = i.risco === 'alto' ? 'badge-danger' : i.risco === 'medio' ? 'badge-warning' : 'badge-success';
+      return `<tr><td><strong>${i.nome||'-'}</strong></td><td class="hide-mobile">${i.tipo||'-'}</td><td><span class="badge ${stBadge}">${i.status||'-'}</span></td><td class="hide-mobile">${i.projeto_nome||'-'}</td><td class="hide-mobile"><span class="badge ${riskBadge}">${i.risco||'baixo'}</span></td></tr>`;
+    }).join('') + `</tbody></table></div>`;
+}
+
+// ================================================
+// SKILLS
+// ================================================
+function renderSkills() {
+  const el = document.getElementById('skills-content');
+  if (allSkills.length === 0) {
+    el.innerHTML = '<div class="card"><p style="color:var(--text-muted);text-align:center;padding:20px;">Nenhuma skill cadastrada.</p></div>';
+    return;
+  }
+  const blocks = {};
+  allSkills.forEach(s => { const b = s.block || 'Fundacao'; if(!blocks[b]) blocks[b]=[]; blocks[b].push(s); });
+  el.innerHTML = Object.entries(blocks).map(([block, skills]) => 
+    `<h3 style="color:var(--text-bright);margin:20px 0 12px;font-size:1.1rem;">${block}</h3>
+     <div class="card-grid" style="grid-template-columns:repeat(auto-fill,minmax(300px,1fr));">` +
+    skills.map(s => `<div class="card">
+      <h4 style="color:var(--primary-light);font-size:0.95rem;margin-bottom:6px;">${s.name}</h4>
+      <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:8px;">${s.description||''}</p>
+      ${s.when_to_use ? `<p style="font-size:0.78rem;color:var(--text-muted);"><strong>Quando:</strong> ${s.when_to_use}</p>` : ''}
+      <span class="badge ${s.active?'badge-success':'badge-muted'}" style="margin-top:8px;">${s.active?'Ativa':'Inativa'}</span>
+    </div>`).join('') + `</div>`
+  ).join('');
+}
+
+// ================================================
+// POLITICAS
+// ================================================
+function renderPoliticas() {
+  const el = document.getElementById('politicas-content');
+  if (allPoliticas.length === 0) {
+    el.innerHTML = '<div class="card"><p style="color:var(--text-muted);text-align:center;padding:20px;">Nenhuma política cadastrada.</p></div>';
+    return;
+  }
+  el.innerHTML = allPoliticas.map(p => `<div class="card" style="margin-bottom:12px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <h4 style="color:var(--text-bright);font-size:1rem;">📜 ${p.name}</h4>
+      <div><span class="badge badge-info">v${p.version||'1.0'}</span> <span class="badge ${p.active?'badge-success':'badge-muted'}">${p.active?'Ativa':'Inativa'}</span></div>
+    </div>
+    <p style="font-size:0.85rem;color:var(--text-muted);line-height:1.5;">${p.content||''}</p>
+    ${p.category ? `<p style="margin-top:8px;font-size:0.78rem;color:var(--text-muted);"><strong>Categoria:</strong> ${p.category}</p>` : ''}
+  </div>`).join('');
+}
+
+// ================================================
+// IA RECOMENDA
+// ================================================
+function renderIA() {
+  const el = document.getElementById('ia-content');
+  if (allRecomendacoes.length === 0) {
+    el.innerHTML = `<div class="card">
+      <p style="color:var(--text-muted);text-align:center;padding:20px;">Nenhuma recomendação de IA cadastrada ainda.</p>
+      <p style="text-align:center;font-size:0.85rem;color:var(--text-muted);">As recomendações aparecerão aqui quando o Tim DCG identificar melhorias, riscos ou oportunidades nos projetos.</p>
+    </div>`;
+    return;
+  }
+  el.innerHTML = allRecomendacoes.map(r => {
+    const sevBadge = r.severity === 'critica' ? 'badge-danger' : r.severity === 'alta' ? 'badge-orange' : r.severity === 'media' ? 'badge-warning' : 'badge-muted';
+    const stBadge = r.status === 'aprovada' ? 'badge-success' : r.status === 'rejeitada' ? 'badge-danger' : r.status === 'executada' ? 'badge-purple' : 'badge-warning';
+    return `<div class="card" style="margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:8px;">
+        <h4 style="color:var(--text-bright);">${r.project_name||'Geral'}</h4>
+        <div><span class="badge ${sevBadge}">${r.severity||'media'}</span> <span class="badge ${stBadge}">${r.status||'pendente'}</span></div>
+      </div>
+      <p style="font-size:0.9rem;color:var(--text);margin-bottom:6px;">${r.recommendation}</p>
+      ${r.reason ? `<p style="font-size:0.82rem;color:var(--text-muted);">Motivo: ${r.reason}</p>` : ''}
+      ${r.decision ? `<p style="font-size:0.82rem;color:var(--primary-light);margin-top:6px;">Decisão: ${r.decision}</p>` : ''}
+    </div>`;
+  }).join('');
+}
+
+// ================================================
+// SALA DE GUERRA
+// ================================================
+function renderGuerra() {
+  const el = document.getElementById('guerra-content');
+  const criticos = allProjetos.filter(p => p.critico);
+  const risco = allProjetos.filter(p => p.risco === 'alto' || p.risco === 'Alto');
+  const tarefasUrg = allTarefas.filter(t => {
+    if (!t.prazo || t.status === 'concluida') return false;
+    return new Date(t.prazo) < new Date();
+  });
+  
+  let html = '';
+  
+  if (tarefasUrg.length > 0) {
+    html += `<div class="risk-banner"><div class="icon">⚠️</div><div class="text"><strong>${tarefasUrg.length} tarefa(s) atrasada(s)</strong><p>Revisar prazos e realocar recursos se necessário.</p></div></div>`;
+  }
+  
+  html += `<div class="card" style="margin-bottom:16px;">
+    <h3 style="color:var(--danger);margin-bottom:12px;font-size:1.1rem;">🔴 Projetos Críticos (${criticos.length})</h3>`;
+  if (criticos.length === 0) {
+    html += '<p style="color:var(--text-muted);">Nenhum projeto crítico.</p>';
+  } else {
+    html += '<div class="table-wrap"><table><thead><tr><th>Projeto</th><th>Status</th><th class="hide-mobile">Próxima Ação</th></tr></thead><tbody>' +
+      criticos.map(p => `<tr><td><strong>${p.nome}</strong></td><td><span class="badge ${p.status==='Em producao'?'badge-success':'badge-warning'}">${p.status||'-'}</span></td><td class="hide-mobile">${p.proxima_acao||'-'}</td></tr>`).join('') +
+      '</tbody></table></div>';
+  }
+  html += '</div>';
+
+  html += `<div class="card" style="margin-bottom:16px;">
+    <h3 style="color:var(--warning);margin-bottom:12px;font-size:1.1rem;">🟡 Risco Alto (${risco.length})</h3>`;
+  if (risco.length === 0) {
+    html += '<p style="color:var(--text-muted);">Nenhum projeto com risco alto.</p>';
+  } else {
+    html += '<div class="table-wrap"><table><thead><tr><th>Projeto</th><th class="hide-mobile">Categoria</th><th>Risco</th></tr></thead><tbody>' +
+      risco.slice(0, 20).map(p => `<tr><td><strong>${p.nome}</strong></td><td class="hide-mobile">${p.categoria||'-'}</td><td><span class="badge badge-danger">alto</span></td></tr>`).join('') +
+      '</tbody></table></div>';
+  }
+  html += '</div>';
+
+  // Lovable bloqueados
+  const bloqueados = allLovable.filter(l => l.risco_compliance);
+  if (bloqueados.length > 0) {
+    html += `<div class="risk-banner"><div class="icon">🚫</div><div class="text"><strong>${bloqueados.length} projetos Lovable com risco de compliance/PI</strong><p>Bloqueados para publicação. Revisar antes de qualquer deploy público.</p></div></div>`;
+    html += `<div class="card"><h3 style="color:var(--danger);margin-bottom:12px;">🚫 Lovable Bloqueados</h3><div class="table-wrap"><table><thead><tr><th>Nome</th><th class="hide-mobile">Descrição</th></tr></thead><tbody>` +
+      bloqueados.map(l => `<tr><td><strong>${l.nome}</strong></td><td class="hide-mobile">${l.descricao||'-'}</td></tr>`).join('') +
+      '</tbody></table></div></div>';
+  }
+
+  el.innerHTML = html;
+}
+
+// ================================================
+// MAPA DO IMPÉRIO
+// ================================================
+function renderImperio() {
+  const el = document.getElementById('imperio-content');
+  const categorias = {};
+  allProjetos.forEach(p => {
+    const c = p.categoria || 'Sem categoria';
+    if (!categorias[c]) categorias[c] = [];
+    categorias[c].push(p);
+  });
+
+  let html = '<div class="kpi-grid" style="margin-bottom:24px;">';
+  html += `<div class="card"><div class="card-icon">📦</div><div class="card-title">Total Projetos</div><div class="card-value">${allProjetos.length}</div></div>`;
+  html += `<div class="card"><div class="card-icon">📂</div><div class="card-title">Categorias</div><div class="card-value">${Object.keys(categorias).length}</div></div>`;
+  html += `<div class="card"><div class="card-icon">💖</div><div class="card-title">Lovable</div><div class="card-value">${allLovable.length}</div></div>`;
+  html += `<div class="card"><div class="card-icon">_TOTAL</div><div class="card-title">Total Ecossistema</div><div class="card-value">${allProjetos.length + allLovable.length}</div></div>`;
+  html += '</div>';
+
+  html += Object.entries(categorias).sort((a,b) => b[1].length - a[1].length).map(([cat, projs]) => {
+    const producao = projs.filter(p => p.status === 'Em producao').length;
+    const pct = Math.round((producao / projs.length) * 100);
+    return `<div class="card" style="margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <h4 style="color:var(--text-bright);">📂 ${cat}</h4>
+        <span class="badge badge-info">${projs.length} projetos</span>
+      </div>
+      <div class="stat-row"><span class="label">Em produção</span><span class="value">${producao} (${pct}%)</span></div>
+      <div class="progress"><div class="progress-fill" style="width:${pct}%;"></div></div>
+      <div style="margin-top:8px;font-size:0.82rem;color:var(--text-muted);">
+        ${projs.slice(0,5).map(p => p.nome).join(' · ')}${projs.length>5 ? ` +${projs.length-5} mais` : ''}
+      </div>
+    </div>`;
+  }).join('');
+
+  el.innerHTML = html;
+}
+
+// ================================================
+// CHAT COM TIM DCG
+// ================================================
+async function sendChat() {
+  const input = document.getElementById('chat-input');
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  const body = document.getElementById('chat-body');
+  body.innerHTML += `<div class="chat-msg user"><div class="bubble">${msg.replace(/</g,'&lt;')}</div><div class="time">${new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</div></div>`;
+  input.value = '';
+  body.scrollTop = body.scrollHeight;
+
+  document.getElementById('chat-typing').classList.add('show');
+  document.getElementById('chat-send').disabled = true;
+
+  chatHistory.push({ role: 'user', content: msg });
+
+  try {
+    const resp = await fetch(TIM_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: msg, conversation_history: chatHistory.slice(-10) })
+    });
+
+    let reply;
+    if (resp.ok) {
+      const data = await resp.json();
+      reply = data.reply || data.message || data.response || 'Recebi! Processando...';
+    } else {
+      reply = `Recebi sua mensagem, Diniz! 📝\n\n"${msg}"\n\nVou processar e te responder em breve. Se for urgente: WhatsApp (11) 93075-9163.`;
+    }
+
+    chatHistory.push({ role: 'assistant', content: reply });
+
+    document.getElementById('chat-typing').classList.remove('show');
+    document.getElementById('chat-send').disabled = false;
+
+    body.innerHTML += `<div class="chat-msg bot"><div class="bubble">${reply.replace(/\n/g,'<br>')}</div><div class="time">${new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</div></div>`;
+    body.scrollTop = body.scrollHeight;
+  } catch(e) {
+    document.getElementById('chat-typing').classList.remove('show');
+    document.getElementById('chat-send').disabled = false;
+    body.innerHTML += `<div class="chat-msg bot"><div class="bubble">Erro de conexão. Tente novamente ou chame no WhatsApp (11) 93075-9163.</div><div class="time">${new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</div></div>`;
+    body.scrollTop = body.scrollHeight;
+  }
+}
+
+// ================================================
+// INIT
+// ================================================
+checkAuth();
+</script>
+</body>
+</html>
